@@ -1,3 +1,7 @@
 *.iml
 *.idea
 postgis/
+.env
+geoserver_data/
+additional_libs/*.jar
+*.log

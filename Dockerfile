@@ -339,6 +339,10 @@ RUN apt-get purge -y  \
 
 RUN chmod +x /opt/*.sh && sed -i 's/\r$//' /opt/startup.sh
 
+COPY config/setenv.sh /usr/local/tomcat/bin/setenv.sh
+RUN chmod +x /usr/local/tomcat/bin/setenv.sh \
+    && sed -i 's/\r$//' /usr/local/tomcat/bin/setenv.sh
+
 ENTRYPOINT ["bash", "/opt/startup.sh"]
 
 WORKDIR /opt
