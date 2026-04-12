@@ -5,3 +5,5 @@ postgis/
 geoserver_data/
 additional_libs/*.jar
 *.log
+config/setenv.sh
+ 
