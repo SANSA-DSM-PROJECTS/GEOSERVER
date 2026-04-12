@@ -1,0 +1,185 @@
+{
+    "title": "GeoServer Monitoring",
+    "timezone": "browser",
+    "refresh": "30s",
+    "panels": [
+        {
+            "title": "WMS Request Rate (req/sec)",
+            "type": "graph",
+            "gridPos": {
+                "x": 0,
+                "y": 0,
+                "w": 12,
+                "h": 8
+            },
+            "targets": [
+                {
+                    "expr": "rate(tomcat_requests_total[5m])",
+                    "legendFormat": "Requests/sec"
+                }
+            ]
+        },
+        {
+            "title": "Average Response Time (ms)",
+            "type": "graph",
+            "gridPos": {
+                "x": 12,
+                "y": 0,
+                "w": 12,
+                "h": 8
+            },
+            "targets": [
+                {
+                    "expr": "rate(tomcat_request_processing_time_ms_total[5m]) / rate(tomcat_requests_total[5m])",
+                    "legendFormat": "Avg Response Time (ms)"
+                }
+            ],
+            "alert": {
+                "name": "High Response Time",
+                "conditions": [
+                    {
+                        "evaluator": {
+                            "type": "gt",
+                            "params": [
+                                10000
+                            ]
+                        },
+                        "query": {
+                            "params": [
+                                "A",
+                                "5m",
+                                "now"
+                            ]
+                        }
+                    }
+                ],
+                "frequency": "1m",
+                "message": "GeoServer average response time exceeded 10 seconds"
+            }
+        },
+        {
+            "title": "JVM Heap Usage %",
+            "type": "gauge",
+            "gridPos": {
+                "x": 0,
+                "y": 8,
+                "w": 8,
+                "h": 8
+            },
+            "targets": [
+                {
+                    "expr": "jvm_memory_heap_used{area='heap',type='used'} / jvm_memory_heap_used{area='heap',type='max'} * 100",
+                    "legendFormat": "Heap %"
+                }
+            ],
+            "options": {
+                "thresholds": {
+                    "steps": [
+                        {
+                            "color": "green",
+                            "value": 0
+                        },
+                        {
+                            "color": "yellow",
+                            "value": 70
+                        },
+                        {
+                            "color": "red",
+                            "value": 85
+                        }
+                    ]
+                }
+            },
+            "alert": {
+                "name": "High Heap Usage",
+                "conditions": [
+                    {
+                        "evaluator": {
+                            "type": "gt",
+                            "params": [
+                                85
+                            ]
+                        },
+                        "query": {
+                            "params": [
+                                "A",
+                                "5m",
+                                "now"
+                            ]
+                        }
+                    }
+                ],
+                "frequency": "1m",
+                "message": "GeoServer JVM heap usage exceeded 85%"
+            }
+        },
+        {
+            "title": "Active Tomcat Threads",
+            "type": "graph",
+            "gridPos": {
+                "x": 8,
+                "y": 8,
+                "w": 8,
+                "h": 8
+            },
+            "targets": [
+                {
+                    "expr": "tomcat_threads_busy",
+                    "legendFormat": "Busy Threads"
+                },
+                {
+                    "expr": "tomcat_threads_max",
+                    "legendFormat": "Max Threads"
+                }
+            ]
+        },
+        {
+            "title": "GC Pause Time (ms)",
+            "type": "graph",
+            "gridPos": {
+                "x": 16,
+                "y": 8,
+                "w": 8,
+                "h": 8
+            },
+            "targets": [
+                {
+                    "expr": "rate(jvm_gc_collection_seconds_total[5m]) * 1000",
+                    "legendFormat": "GC Time - {{gc}}"
+                }
+            ]
+        },
+        {
+            "title": "Tomcat Errors Rate",
+            "type": "graph",
+            "gridPos": {
+                "x": 0,
+                "y": 16,
+                "w": 12,
+                "h": 8
+            },
+            "targets": [
+                {
+                    "expr": "rate(tomcat_errors_total[5m])",
+                    "legendFormat": "Errors/sec"
+                }
+            ]
+        },
+        {
+            "title": "CPU Load %",
+            "type": "graph",
+            "gridPos": {
+                "x": 12,
+                "y": 16,
+                "w": 12,
+                "h": 8
+            },
+            "targets": [
+                {
+                    "expr": "jvm_os_cpu_load * 100",
+                    "legendFormat": "CPU %"
+                }
+            ]
+        }
+    ]
+}

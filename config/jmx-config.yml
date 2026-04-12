@@ -1,0 +1,102 @@
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+
+rules:
+  # ── JVM Memory ─────────────────────────────────────────
+  - pattern: "java.lang:type=Memory"
+    name: jvm_memory_heap_used
+    valueName: HeapMemoryUsage
+    attrNameSnakeCase: true
+
+  - pattern: "java.lang:type=Memory"
+    name: jvm_memory_nonheap_used
+    valueName: NonHeapMemoryUsage
+    attrNameSnakeCase: true
+
+  # ── JVM GC ─────────────────────────────────────────────
+  - pattern: "java.lang:type=GarbageCollector,name=(.*)"
+    name: jvm_gc_collection_seconds_total
+    labels:
+      gc: "$1"
+    valueName: CollectionTime
+    attrNameSnakeCase: true
+
+  - pattern: "java.lang:type=GarbageCollector,name=(.*)"
+    name: jvm_gc_collection_count_total
+    labels:
+      gc: "$1"
+    valueName: CollectionCount
+    attrNameSnakeCase: true
+
+  # ── JVM Threads ─────────────────────────────────────────
+  - pattern: "java.lang:type=Threading"
+    name: jvm_threads_current
+    valueName: ThreadCount
+    attrNameSnakeCase: true
+
+  - pattern: "java.lang:type=Threading"
+    name: jvm_threads_peak
+    valueName: PeakThreadCount
+    attrNameSnakeCase: true
+
+  # ── Tomcat Global Request Processor ────────────────────
+  - pattern: 'Catalina:type=GlobalRequestProcessor,name="(.*)"'
+    name: tomcat_requests_total
+    labels:
+      name: "$1"
+    valueName: requestCount
+    attrNameSnakeCase: true
+
+  - pattern: 'Catalina:type=GlobalRequestProcessor,name="(.*)"'
+    name: tomcat_request_processing_time_ms_total
+    labels:
+      name: "$1"
+    valueName: processingTime
+    attrNameSnakeCase: true
+
+  - pattern: 'Catalina:type=GlobalRequestProcessor,name="(.*)"'
+    name: tomcat_errors_total
+    labels:
+      name: "$1"
+    valueName: errorCount
+    attrNameSnakeCase: true
+
+  - pattern: 'Catalina:type=GlobalRequestProcessor,name="(.*)"'
+    name: tomcat_bytes_sent_total
+    labels:
+      name: "$1"
+    valueName: bytesSent
+    attrNameSnakeCase: true
+
+  # ── Tomcat Thread Pool ──────────────────────────────────
+  - pattern: 'Catalina:type=ThreadPool,name="(.*)"'
+    name: tomcat_threads_current
+    labels:
+      name: "$1"
+    valueName: currentThreadCount
+    attrNameSnakeCase: true
+
+  - pattern: 'Catalina:type=ThreadPool,name="(.*)"'
+    name: tomcat_threads_busy
+    labels:
+      name: "$1"
+    valueName: currentThreadsBusy
+    attrNameSnakeCase: true
+
+  - pattern: 'Catalina:type=ThreadPool,name="(.*)"'
+    name: tomcat_threads_max
+    labels:
+      name: "$1"
+    valueName: maxThreads
+    attrNameSnakeCase: true
+
+  # ── JVM OS ──────────────────────────────────────────────
+  - pattern: "java.lang:type=OperatingSystem"
+    name: jvm_os_cpu_load
+    valueName: ProcessCpuLoad
+    attrNameSnakeCase: true
+
+  - pattern: "java.lang:type=OperatingSystem"
+    name: jvm_os_memory_free_bytes
+    valueName: FreePhysicalMemorySize
+    attrNameSnakeCase: true
